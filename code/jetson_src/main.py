@@ -33,7 +33,7 @@ class App:
 
     def add_webcam(self, label):
         if 'cap' not in self.__dict__:
-            self.cap = cv2.VideoCapture(5)
+            self.cap = cv2.VideoCapture(4)
 
         self._label = label
         self.process_webcam()
