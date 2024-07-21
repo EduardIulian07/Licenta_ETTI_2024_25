@@ -1,0 +1,1 @@
+1. Eroare legata de VSCode, versiunea instalata initial a fost mult prea noua pentru sistemul de operare al Jetson Xavier --> Sol: Downgrade VSCode
