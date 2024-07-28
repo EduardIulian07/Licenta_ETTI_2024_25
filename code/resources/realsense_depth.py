@@ -15,6 +15,7 @@ class DepthCamera:
 
         config.enable_stream(rs.stream.depth, 640, 480, rs.format.z16, 30)
         config.enable_stream(rs.stream.color, 640, 480, rs.format.bgr8, 30)
+        config.enable_stream(rs.stream.infrared)
 
 
 
@@ -23,14 +24,16 @@ class DepthCamera:
 
     def get_frame(self):
         frames = self.pipeline.wait_for_frames()
-        depth_frame = frames.get_depth_frame()
-        color_frame = frames.get_color_frame()
+        depth_frame    = frames.get_depth_frame()
+        color_frame    = frames.get_color_frame()
+        infrared_frame = frames.get_infrared_frame()
 
-        depth_image = np.asanyarray(depth_frame.get_data())
-        color_image = np.asanyarray(color_frame.get_data())
-        if not depth_frame or not color_frame:
+        depth_image    = np.asanyarray(depth_frame.get_data())
+        color_image    = np.asanyarray(color_frame.get_data())
+        infrared_image = np.asanyarray(infrared_frame.get_data())
+        if not depth_frame or not color_frame or not infrared_frame:
             return False, None, None
-        return True, depth_image, color_image
+        return True, depth_image, color_image, infrared_image
 
     def release(self):
         self.pipeline.stop()

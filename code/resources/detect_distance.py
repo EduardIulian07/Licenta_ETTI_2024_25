@@ -4,6 +4,8 @@ from realsense_depth import *
 
 point = (400, 300)
 
+print("OpenCV Version: ", cv2.__version__)
+
 def show_distance(event, x, y, args, params):
     global point
     point = (x, y)
@@ -16,7 +18,7 @@ cv2.namedWindow("Color frame")
 cv2.setMouseCallback("Color frame", show_distance)
 
 while True:
-    ret, depth_frame, color_frame = dc.get_frame()
+    ret, depth_frame, color_frame, IR_frame = dc.get_frame()
 
     # Show distance for a specific point
     cv2.circle(color_frame, point, 4, (0, 0, 255))
@@ -26,6 +28,7 @@ while True:
 
     cv2.imshow("depth frame", depth_frame)
     cv2.imshow("Color frame", color_frame)
+    cv2.imshow("IR frame", IR_frame)
     key = cv2.waitKey(1)
     if key == 27:
         break
