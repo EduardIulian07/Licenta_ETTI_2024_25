@@ -1,8 +1,14 @@
-"""
-This is the main file that handles the script for face recognition application.
-"""
+import os.path
+import datetime
+import pickle
 
-from dependencies import *
+import tkinter as tk
+import cv2
+from PIL import Image, ImageTk
+import face_recognition
+
+import util
+from test import test
 
 
 class App:
@@ -33,7 +39,7 @@ class App:
 
     def add_webcam(self, label):
         if 'cap' not in self.__dict__:
-            self.cap = cv2.VideoCapture(5)
+            self.cap = cv2.VideoCapture(2)
 
         self._label = label
         self.process_webcam()
