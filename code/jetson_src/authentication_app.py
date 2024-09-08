@@ -1,11 +1,4 @@
-import sys
-import cv2
-import sqlite3
-import numpy as np
-import face_recognition
-from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QVBoxLayout, QPushButton
-from PyQt5.QtGui import QImage, QPixmap
-from PyQt5.QtCore import QTimer
+from dependencies import *
 
 # Baza de date pentru utilizatori
 conn = sqlite3.connect('users.db')
@@ -16,10 +9,10 @@ class AuthenticationApp(QWidget):
         super().__init__()
         self.initUI()
         self.load_user_data()
-        self.cap = cv2.VideoCapture(4)
+        self.cap = cv2.VideoCapture(0)
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.update_frame)
-        self.timer.start(30)  # Actualizare frame la fiecare 30 ms
+        self.timer.start(1)  # Actualizare frame la fiecare 30 ms
 
     def initUI(self):
         self.setWindowTitle('Autentificare Utilizator')

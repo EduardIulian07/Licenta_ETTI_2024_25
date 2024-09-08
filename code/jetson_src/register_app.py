@@ -1,10 +1,4 @@
-import sys
-import cv2
-import sqlite3
-import numpy as np
-from PyQt5.QtWidgets import (QApplication, QWidget, QLabel, QPushButton, QVBoxLayout, QLineEdit, QComboBox, QMainWindow)
-from PyQt5.QtGui import QImage, QPixmap
-from PyQt5.QtCore import QTimer
+from dependencies import *
 
 # Baza de date pentru utilizatori
 conn = sqlite3.connect('users.db')
@@ -92,7 +86,7 @@ class RegisterApp(QMainWindow):
         central_widget.setLayout(layout)
 
         # Configurarea camerei (OpenCV)
-        self.cap = cv2.VideoCapture(4)
+        self.cap = cv2.VideoCapture(0)
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.update_frame)
         self.timer.start(30)  # Actualizare frame la fiecare 30 ms
