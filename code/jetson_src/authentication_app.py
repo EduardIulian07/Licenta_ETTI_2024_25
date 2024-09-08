@@ -16,7 +16,7 @@ class AuthenticationApp(QWidget):
         super().__init__()
         self.initUI()
         self.load_user_data()
-        self.cap = cv2.VideoCapture(0)
+        self.cap = cv2.VideoCapture(4)
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.update_frame)
         self.timer.start(30)  # Actualizare frame la fiecare 30 ms
