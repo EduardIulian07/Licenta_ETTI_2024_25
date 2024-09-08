@@ -1,15 +1,28 @@
+"""
+This file will be run from the server machine to populate the database with users' images and names.
+"""
+
 from dependencies import *
 
-# Baza de date pentru utilizatori
-conn = sqlite3.connect('users.db')
+# Configurare conexiune baza de date remote
+db_config = {
+    'user': 'root',
+    'password': '4c7oo2cr7K.',
+    'host': 'localhost',
+    'database': 'user_database',
+    'port': 3306  # Portul implicit pentru MySQL
+}
+
+# Conectare la baza de date remote
+conn = mysql.connector.connect(**db_config)
 c = conn.cursor()
 
-# Creare tabel daca nu exista, cu camp pentru imagine
+# Creare tabel daca nu exista, cu camp pentru imagine (tip MEDIUMBLOB)
 c.execute('''
 CREATE TABLE IF NOT EXISTS users (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    id INTEGER PRIMARY KEY AUTO_INCREMENT,
     name TEXT NOT NULL,
-    image BLOB NOT NULL
+    image LONGBLOB NOT NULL
 )''')
 conn.commit()
 
@@ -111,11 +124,19 @@ class RegisterApp(QMainWindow):
                 print("Numele utilizatorului nu poate fi gol!")
                 return
 
-            _, buffer = cv2.imencode('.jpg', frame)
+            # Redimensionare imagine daca e prea mare
+            height, width = frame.shape[:2]
+            max_dimension = 800  # Dimensiune maxima dorita
+            if max(height, width) > max_dimension:
+                scaling_factor = max_dimension / float(max(height, width))
+                frame = cv2.resize(frame, None, fx=scaling_factor, fy=scaling_factor, interpolation=cv2.INTER_AREA)
+
+            # Compresie imagine pentru a reduce dimensiunea
+            _, buffer = cv2.imencode('.jpg', frame, [cv2.IMWRITE_JPEG_QUALITY, 90])  # Compresie la 90% calitate
             image_blob = buffer.tobytes()
 
             # Salveaza utilizatorul si imaginea in baza de date
-            c.execute("INSERT INTO users (name, image) VALUES (?, ?)", (name, image_blob))
+            c.execute("INSERT INTO users (name, image) VALUES (%s, %s)", (name, image_blob))
             conn.commit()
 
             # Actualizeaza lista de utilizatori
@@ -132,10 +153,10 @@ class RegisterApp(QMainWindow):
             self.user_list.addItem(user[0])
 
     def show_user_image(self):
-        """Deschide o fereastra nouă cu imaginea utilizatorului selectat din baza de date."""
+        """Deschide o fereastra noua cu imaginea utilizatorului selectat din baza de date."""
         selected_user = self.user_list.currentText()
         if selected_user:
-            c.execute("SELECT image FROM users WHERE name=?", (selected_user,))
+            c.execute("SELECT image FROM users WHERE name=%s", (selected_user,))
             user_data = c.fetchone()
             if user_data:
                 image_data = user_data[0]
@@ -144,13 +165,21 @@ class RegisterApp(QMainWindow):
 
     def delete_last_image(self):
         """Sterge ultima imagine inregistrata in baza de date."""
-        c.execute("DELETE FROM users WHERE id = (SELECT MAX(id) FROM users)")
-        conn.commit()
+        try:
+            # Șterge ultima imagine folosind JOIN
+            c.execute('''
+            DELETE users FROM users
+            JOIN (SELECT MAX(id) AS max_id FROM users) AS temp_max_id
+            ON users.id = temp_max_id.max_id;
+            ''')
+            conn.commit()
 
-        # Actualizeaza lista de utilizatori
-        self.update_user_list()
+            # Actualizează lista de utilizatori
+            self.update_user_list()
 
-        print("Ultima imagine a fost stearsa!")
+            print("Ultima imagine a fost stearsa!")
+        except mysql.connector.Error as err:
+            print(f"Eroare: {err}")
 
     def closeEvent(self, event):
         """Curatarea resurselor la inchiderea aplicatiei."""

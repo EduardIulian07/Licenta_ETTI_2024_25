@@ -1,7 +1,21 @@
+"""
+This file will be run from the remote machine to access the remote database in order recognize the user.
+To connect to the SERVER's DB from JETSON use this command: mysql -u 'jetson_username' -p -h 'server_ip_address'
+"""
+
 from dependencies import *
 
+# Configurare conexiune baza de date remote
+db_config = {
+    'user': 'root', # need to be changed with the JETSON's USERNAME
+    'password': '4c7oo2cr7K.', # the password for JETSON in the USER TABLE setup from the SERVER
+    'host': 'localhost', # the IP ADDRESS OF THE SERVER
+    'database': 'user_database', # data base name
+    'port': 3306  # Portul implicit pentru MySQL
+}
+
 # Baza de date pentru utilizatori
-conn = sqlite3.connect('users.db')
+conn = mysql.connector.connect(**db_config)
 c = conn.cursor()
 
 class AuthenticationApp(QWidget):
