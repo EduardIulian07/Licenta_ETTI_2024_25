@@ -8,7 +8,7 @@ from dependencies import *
 # Configurare conexiune baza de date remote
 db_config = {
     'user': 'root', # need to be changed with the JETSON's USERNAME
-    'password': '4c7oo2cr7K.', # the password for JETSON in the USER TABLE setup from the SERVER
+    'password': os.getenv('DB_ROOT_PASSWORD'), # the password for JETSON in the USER TABLE setup from the SERVER
     'host': 'localhost', # the IP ADDRESS OF THE SERVER
     'database': 'user_database', # data base name
     'port': 3306  # Portul implicit pentru MySQL
