@@ -4,16 +4,6 @@ This file will be run from the server machine to populate the database with user
 
 from dependencies import *
 
-from PyQt5.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout, QLabel, QLineEdit, QPushButton, 
-                             QComboBox, QDialog, QFormLayout, QMessageBox)
-from PyQt5.QtGui import QPixmap, QImage
-from PyQt5.QtCore import QTimer
-import mysql.connector
-import cv2
-import numpy as np
-import sys
-import os
-from mysql.connector import errorcode
 
 # Funcție pentru crearea unui nou utilizator cu permisiuni limitate
 def create_user_if_not_exists(cursor, username, password):
@@ -124,24 +114,36 @@ def main():
 
         app = QApplication([])
 
-        login_dialog = LoginDialog()
-        if login_dialog.exec_() == QDialog.Accepted:
-            username, password, register_password = login_dialog.get_credentials()
+        max_attempts = 3  # Numarul maxim de incercari
+        attempts = 0      # Contorul incercarilor
 
-            if login_dialog.is_registration():
-                if password != register_password:
-                    QMessageBox.warning(login_dialog, 'Eroare', 'Parolele nu sunt identice!')
-                    return
+        while attempts < max_attempts:
+            login_dialog = LoginDialog()
+            if login_dialog.exec_() == QDialog.Accepted:
+                username, password, register_password = login_dialog.get_credentials()
 
-                create_user_if_not_exists(root_cursor, username, password)
-                root_conn.commit()
+                if login_dialog.is_registration():
+                    if password != register_password:
+                        QMessageBox.warning(login_dialog, 'Eroare', 'Parolele nu sunt identice!')
+                        continue
 
-            user_conn = connect_to_db(username, password)
-            if user_conn:
-                c = user_conn.cursor()
-                window = RegisterApp(c, user_conn)
-                window.show()
-                sys.exit(app.exec_())
+                    create_user_if_not_exists(root_cursor, username, password)
+                    root_conn.commit()
+
+                user_conn = connect_to_db(username, password)
+                if user_conn:
+                    c = user_conn.cursor()
+                    window = RegisterApp(c, user_conn)
+                    window.show()
+                    sys.exit(app.exec_())
+                else:
+                    attempts += 1
+                    print(f"Încercare eșuată. Mai ai {max_attempts - attempts} încercări rămase.")
+            else:
+                break
+
+        if attempts >= max_attempts:
+            print("Număr maxim de încercări eșuate. Aplicația se va închide.")
 
         root_conn.close()
 
