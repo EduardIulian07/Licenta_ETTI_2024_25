@@ -1,3 +1,15 @@
 1. Eroare legata de VSCode, versiunea instalata initial a fost mult prea noua pentru sistemul de operare al Jetson Xavier --> Sol: Downgrade VSCode
     Command used: wget https://update.code.visualstudio.com/1.50.0/linux-deb-arm64/stable -O stable.deb
 		          sudo dpkg -i stable.deb
+
+2. Eroare legata de libraria OpenCV din python. By default, Jetson Xavier vine cu versiuena 4.5.4 a librariei OpenCV, dar eu aveam nevoie de versiunea 4.10.0
+    asa ca am construit-o folosind scriptul dedicat acestui lucru pentru Jetson Xavier. Marea problema a fost atunci cand importam libraria si
+    anume ca aceasta nu aparea cu versiunea nou.
+    SOLUTIE:
+        Se ruleaza urmatorul set de comenzi:
+            a) which opencv_version  --> asta ne spune exact ce versiuni de OpenCV avem isntalate si unde
+            b) sudo find -name opencv_version  --> vom gasi exact locatiile unde sunt instalate aceste versiuni de OpenCV
+                                                Se constata faptul ca sunt doua locatii: ./bin/opencv_version si ./local/bin/opencv_version
+                                                Versiuena dorita sa afla in cea de-a doua locatie asa ca trebuie facuta o modificare.
+            c) export PYTHONPATH=/usr/local/lib/python3.8/site-packages:$PYTHONPATH --> Se va adauga aceasta linie in fisierul ~/.bashrc
+                                                                                        pentru a permite python sa stie ce versiune vrem sa folosim.
