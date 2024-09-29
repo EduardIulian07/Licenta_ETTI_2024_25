@@ -13,3 +13,7 @@
                                                 Versiuena dorita sa afla in cea de-a doua locatie asa ca trebuie facuta o modificare.
             c) export PYTHONPATH=/usr/local/lib/python3.8/site-packages:$PYTHONPATH --> Se va adauga aceasta linie in fisierul ~/.bashrc
                                                                                         pentru a permite python sa stie ce versiune vrem sa folosim.
+
+3. Eroare legata de instalarea librariei 'pyqt5'
+    SOLUTIE:
+        Se va rula comanda asta pentru a instala in mod corect libraria: sudo apt install python3-pyqt5
