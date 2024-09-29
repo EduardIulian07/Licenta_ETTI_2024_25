@@ -7,9 +7,9 @@ from dependencies import *
 
 # Configurare conexiune baza de date remote
 db_config = {
-    'user': 'root', # need to be changed with the JETSON's USERNAME
-    'password': os.getenv('DB_ROOT_PASSWORD'), # the password for JETSON in the USER TABLE setup from the SERVER
-    'host': 'localhost', # the IP ADDRESS OF THE SERVER
+    'user': 'xavier', # need to be changed with the JETSON's USERNAME
+    'password': os.getenv('DB_ROOT_PASSWORD'), # Need to do export DB_ROOT_PASSWORD='password-to-db'
+    'host': '192.168.1.140', # the IP ADDRESS OF THE SERVER
     'database': 'user_database', # data base name
     'port': 3306  # Portul implicit pentru MySQL
 }
@@ -23,7 +23,7 @@ class AuthenticationApp(QWidget):
         super().__init__()
         self.initUI()
         self.load_user_data()
-        self.cap = cv2.VideoCapture(0)
+        self.cap = cv2.VideoCapture(4) # CHANGE HERE TO 0 WHEN RUNNING FROM LAPTOP AND TO  '4' WHEN RUNNING FROM XAVIER
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.update_frame)
         self.timer.start(1)  # Actualizare frame la fiecare 30 ms
