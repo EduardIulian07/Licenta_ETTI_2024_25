@@ -1,5 +1,10 @@
 """
 This file will be run from the server machine to populate the database with users' images and names.
+This sript is using environment variables so you need to define 'DB_USER' and 'DB_PASS' inside ~/.profile file like this:
+    EXPORT DB_USER="user_for_db"
+    EXPORT DB_PASS="pass_for_db"
+And then you need to apply this command:
+    source ~/.profile
 """
 
 from dependencies import *
@@ -101,8 +106,8 @@ class LoginDialog(QDialog):
 # Funcția principală a aplicației
 def main():
     root_config = {
-        'user': 'root',
-        'password': os.getenv('DB_ROOT_PASSWORD'),
+        'user': os.getenv('DB_USER'),
+        'password': os.getenv('DB_PASS'),
         'host': 'localhost',
         'database': 'user_database',
         'port': 3306
