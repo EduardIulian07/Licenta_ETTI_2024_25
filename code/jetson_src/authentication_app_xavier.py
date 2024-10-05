@@ -4,7 +4,7 @@ from dependencies import *
 db_config = {
     'user': os.getenv('DB_USER'),  # Utilizatorul pentru baza de date
     'password': os.getenv('DB_PASS'),  # Parola pentru baza de date
-    'host': 'localhost',  # Adresa IP a serverului
+    'host': '192.168.1.135',  # Adresa IP a serverului
     'database': 'user_database',  # Numele bazei de date
     'port': 3306  # Portul implicit pentru MySQL
 }
@@ -40,7 +40,7 @@ known_face_encodings, known_face_names = load_user_data()
 
 # Funcția principală care procesează și afișează frame-urile
 def run_face_recognition():
-    cap = cv2.VideoCapture(0)  # Schimba la 4 pe Xavier dacă este necesar
+    cap = cv2.VideoCapture(5)  # Schimba la 4 pe Xavier dacă este necesar
 
     while True:
         ret, frame = cap.read()
@@ -52,7 +52,7 @@ def run_face_recognition():
         rgb_image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
         # Detectarea fețelor în imagine
-        face_locations = face_recognition.face_locations(rgb_image)
+        face_locations = face_recognition.face_locations(rgb_image, model="cnn")
         face_encodings = face_recognition.face_encodings(rgb_image, face_locations)
 
         # Compararea fețelor detectate cu cele din baza de date

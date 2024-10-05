@@ -14,7 +14,7 @@ from dependencies import *
 db_config = {
     'user': os.getenv('DB_USER'), # need to be changed with the JETSON's USERNAME
     'password': os.getenv('DB_PASS'), # Need to do export DB_ROOT_PASSWORD='password-to-db'
-    'host': 'localhost', # the IP ADDRESS OF THE SERVER
+    'host': '192.168.1.135', # the IP ADDRESS OF THE SERVER
     'database': 'user_database', # data base name
     'port': 3306  # Portul implicit pentru MySQL
 }
@@ -28,7 +28,7 @@ class AuthenticationApp(QWidget):
         super().__init__()
         self.initUI()
         self.load_user_data()
-        self.cap = cv2.VideoCapture(0) # CHANGE HERE TO 0 WHEN RUNNING FROM LAPTOP AND TO  '4' WHEN RUNNING FROM XAVIER
+        self.cap = cv2.VideoCapture(4) # CHANGE HERE TO 0 WHEN RUNNING FROM LAPTOP AND TO  '4' WHEN RUNNING FROM XAVIER
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.update_frame)
         self.timer.start(30)  # Actualizare frame la fiecare 30 ms
@@ -96,7 +96,7 @@ class AuthenticationApp(QWidget):
             rgb_image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
             # Detectare fețe
-            face_locations = face_recognition.face_locations(rgb_image)
+            face_locations = face_recognition.face_locations(rgb_image, model="cnn")
             face_encodings = face_recognition.face_encodings(rgb_image, face_locations)
 
             if face_encodings:  # Verifică dacă există fețe
