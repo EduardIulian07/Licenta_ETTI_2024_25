@@ -31,7 +31,7 @@ class AuthenticationApp(QWidget):
         self.cap = cv2.VideoCapture(0) # CHANGE HERE TO 0 WHEN RUNNING FROM LAPTOP AND TO  '4' WHEN RUNNING FROM XAVIER
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.update_frame)
-        self.timer.start(1)  # Actualizare frame la fiecare 30 ms
+        self.timer.start(30)  # Actualizare frame la fiecare 30 ms
 
     def initUI(self):
         self.setWindowTitle('Autentificare Utilizator')
@@ -75,6 +75,23 @@ class AuthenticationApp(QWidget):
         """Actualizează frame-ul din fluxul video și verifică recunoașterea feței."""
         ret, frame = self.cap.read()
         if ret:
+            # Obținerea dimensiunilor originale ale frame-ului
+            h_original, w_original = frame.shape[:2]
+
+            # Calcularea raportului de aspect (width/height)
+            aspect_ratio = w_original / h_original
+
+            # Setăm o dimensiune maximă pentru lățime sau înălțime, dar păstrăm proporțiile
+            target_width = 500
+            target_height = int(target_width / aspect_ratio)
+
+            if target_height > 300:
+                target_height = 300
+                target_width = int(target_height * aspect_ratio)
+
+            # Redimensionăm frame-ul păstrând proporțiile
+            frame = cv2.resize(frame, (target_width, target_height))
+
             # Conversia frame-ului de la BGR (OpenCV) la RGB (pentru face_recognition)
             rgb_image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
@@ -101,6 +118,16 @@ class AuthenticationApp(QWidget):
             convert_to_Qt_format = QImage(frame.data, w, h, bytes_per_line, QImage.Format_RGB888)
             self.video_label.setPixmap(QPixmap.fromImage(convert_to_Qt_format))
 
+
+    def close_app(self):
+        """Închide aplicația în mod corespunzător."""
+        self.cap.release()
+        self.close()  # Închide fereastra aplicației PyQt
+
+    def keyPressEvent(self, event):
+        """Captura apăsării tastelor pentru a închide aplicația la 'q' sau 'ESC'."""
+        if event.key() == Qt.Key_Q or event.key() == Qt.Key_Escape:
+            self.close_app()  # Apelarea funcției de închidere a aplicației
 
     def closeEvent(self, event):
         """Curățarea resurselor la închiderea aplicației."""
