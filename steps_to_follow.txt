@@ -1,0 +1,13 @@
+1. On the server the following steps are needed in order to configure this application:
+    a) Open the database via this command: 
+        'mysql -u root -p'
+    b) Create a new entry in the database user table for the client, in our case Jetson Xavier NX via this command: 
+        'CREATE USER 'xavier'@'ip_address' IDENTIFIED BY 'password';'
+    c) Grant the privileges for this new user via this command:
+        'GRANT ALL PRIVILEGES ON user_database.* TO 'xavier'@'ip_address';'
+        'FLUSH PRIVILEGES;'
+    d) Make sure the register application is working fine and the users that have access to the door are added to the database correctly.
+
+2. On the client the following steps are needed in order to configure this application:
+    a) Check inside ~/.profile to see that DB_USER and DB_PASS are correctly set.
+    b) Make sure the camera is mounted and the port is correctly set inside the authenticate part of the application.
