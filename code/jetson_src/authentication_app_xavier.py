@@ -50,7 +50,7 @@ def run_face_recognition():
         rgb_image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
         # Detectarea fețelor în imagine
-        face_locations = face_recognition.face_locations(rgb_image)
+        face_locations = face_recognition.face_locations(rgb_image, model="cnn")
         face_encodings = face_recognition.face_encodings(rgb_image, face_locations)
 
         if face_encodings:
@@ -65,6 +65,8 @@ def run_face_recognition():
 
                 # Afișează numele utilizatorului recunoscut în log
                 print(f"Utilizator recunoscut: {name}")
+        else:
+            print("Nicio fata detectata in acest frame.")
 
         # Închidere pe baza tastelor 'q' sau 'ESC'
         key = cv2.waitKey(1) & 0xFF
