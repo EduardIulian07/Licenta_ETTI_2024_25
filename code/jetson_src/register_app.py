@@ -17,8 +17,8 @@ def create_user_if_not_exists(cursor, username, password):
         user_exists = cursor.fetchone()[0]
 
         if not user_exists:
-            cursor.execute(f"CREATE USER '{username}'@'localhost' IDENTIFIED BY '{password}'")
-            cursor.execute(f"GRANT SELECT, INSERT, UPDATE ON user_database.* TO '{username}'@'localhost'")
+            cursor.execute(f"CREATE USER '{username}'@'%' IDENTIFIED BY '{password}'")
+            cursor.execute(f"GRANT SELECT, INSERT, UPDATE ON user_database.* TO '{username}'@'%'")
             cursor.execute(f"FLUSH PRIVILEGES")
             print(f"Utilizatorul {username} a fost creat cu succes.")
         else:
