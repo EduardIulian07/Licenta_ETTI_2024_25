@@ -96,7 +96,7 @@ class AuthenticationApp(QWidget):
             rgb_image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
             # Detectare fețe
-            face_locations = face_recognition.face_locations(rgb_image, model="cnn")
+            face_locations = face_recognition.face_locations(rgb_image)
             face_encodings = face_recognition.face_encodings(rgb_image, face_locations)
 
             if face_encodings:  # Verifică dacă există fețe
