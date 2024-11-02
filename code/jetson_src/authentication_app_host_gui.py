@@ -28,7 +28,7 @@ class AuthenticationApp(QWidget):
         super().__init__()
         self.initUI()
         self.load_user_data()
-        self.cap = cv2.VideoCapture(0) # CHANGE HERE TO 0 WHEN RUNNING FROM LAPTOP AND TO  '4' WHEN RUNNING FROM XAVIER
+        self.cap = cv2.VideoCapture(0) # Camera index, usually set to '0'
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.update_frame)
         self.timer.start(30)  # Actualizare frame la fiecare 30 ms
