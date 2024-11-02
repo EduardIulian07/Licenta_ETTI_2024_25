@@ -1,0 +1,7 @@
+DATE: 02.11.2024
+    1. Continue testing the app server to make sure that the following are working:
+        a) The connection to the database is WORKING for a known user.
+        b) The connection to the database is NOT WORKING for an unknown user.
+    2. Develop the following to the app:
+        a) Implement method to post a photo to the database for a specific user. Add fields for first and last name, e-mail, function, etc.
+    3. Make the similar app for the authenticate part as well.

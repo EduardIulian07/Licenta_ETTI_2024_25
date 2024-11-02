@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Înregistrare Utilizator</title>
+</head>
+<body>
+    <h1>Înregistrare Utilizator</h1>
+
+    {% with messages = get_flashed_messages(with_categories=True) %}
+        {% if messages %}
+            <ul>
+            {% for category, message in messages %}
+                <li class="{{ category }}">{{ message }}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+
+    <form method="POST" action="{{ url_for('register_user') }}">
+        <label for="username">Nume utilizator:</label>
+        <input type="text" id="username" name="username" required>
+        
+        <label for="password">Parolă:</label>
+        <input type="password" id="password" name="password" required>
+
+        <label for="confirm_password">Confirmare parolă:</label>
+        <input type="password" id="confirm_password" name="confirm_password" required>
+
+        <button type="submit">Înregistrează-te</button>
+    </form>
+    
+    <a href="/">Înapoi la pagina principală</a>
+</body>
+</html>
