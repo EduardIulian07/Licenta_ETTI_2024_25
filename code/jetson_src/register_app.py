@@ -117,7 +117,7 @@ def main():
         root_conn = mysql.connector.connect(**root_config)
         root_cursor = root_conn.cursor()
 
-        app = QApplication([])
+        app = QApplication(sys.argv) # Constructor pentru aplicatie. Configuratia sistemului este data ca argument.
 
         max_attempts = 3  # Numarul maxim de incercari
         attempts = 0      # Contorul incercarilor
