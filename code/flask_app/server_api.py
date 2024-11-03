@@ -1,6 +1,4 @@
-from flask import Flask, request, render_template, redirect, url_for, flash
-import mysql.connector
-import os
+from utils import *
 
 app = Flask(__name__)
 app.secret_key = os.urandom(24)

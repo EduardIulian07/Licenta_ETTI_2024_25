@@ -7,8 +7,7 @@ And then you need to apply this command:
     source ~/.profile
 """
 
-from dependencies import *
-
+from utils import *
 
 # Funcție pentru crearea unui nou utilizator cu permisiuni limitate
 def create_user_if_not_exists(cursor, username, password):

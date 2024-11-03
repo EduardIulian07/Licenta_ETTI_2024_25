@@ -1,4 +1,4 @@
-from dependencies import *
+from utils import *
 
 # Configurare conexiune baza de date remote
 db_config = {

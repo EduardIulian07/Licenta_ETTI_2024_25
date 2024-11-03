@@ -8,7 +8,7 @@ And then you need to apply this command:
     source ~/.profile
 """
 
-from dependencies import *
+from utils import *
 
 # Configurare conexiune baza de date remote
 db_config = {
